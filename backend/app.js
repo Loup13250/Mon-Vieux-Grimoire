@@ -1,11 +1,12 @@
 const express = require("express");
+// const bookRoutes = require("./routes/books");
+const userRoutes = require("./routes/userM");
+
+const path = require("path"); //manipuler les chemins de fichiers
 const app = express();
-const path = require("path");
-// const bookRoutes = require("./routes/book");
-// const userRoutes = require("./routes/user");
 app.use(express.json());
 
-const mongoose = require("mongoose");
+const mongoose = require("mongoose"); // faire un config et mettre mongo dedans
 mongoose
   .connect(
     "mongodb+srv://loup:2UjwoLCqxxMnQIAF@cluster0.97ys2.mongodb.net/test?retryWrites=true&w=majority",
@@ -27,7 +28,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// app.use('/api/books', bookRoutes);
-// app.use('/api/auth', userRoutes);
+// app.use("/api/books", bookRoutes);
+app.use("/api/auth", userRoutes);
 
 module.exports = app;
