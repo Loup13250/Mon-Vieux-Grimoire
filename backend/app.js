@@ -1,8 +1,11 @@
 const express = require("express");
 const app = express();
-const mongoose = require("mongoose");
-app.use(express.json()); //Express prend toutes les requêtes qui ont comme Content-Type  application/json  et met à disposition leur  body
+const path = require("path");
+// const bookRoutes = require("./routes/book");
+// const userRoutes = require("./routes/user");
+app.use(express.json());
 
+const mongoose = require("mongoose");
 mongoose
   .connect(
     "mongodb+srv://loup:2UjwoLCqxxMnQIAF@cluster0.97ys2.mongodb.net/test?retryWrites=true&w=majority",
@@ -12,7 +15,6 @@ mongoose
   .catch(() => console.log("Connexion à MongoDB échouée !"));
 
 app.use((req, res, next) => {
-  console.log("Incoming request");
   res.setHeader("Access-Control-Allow-Origin", "*"); // accéder à l'API depuis n'importe quelle origine ( '*' )
   res.setHeader(
     "Access-Control-Allow-Headers",
@@ -24,5 +26,8 @@ app.use((req, res, next) => {
   ); //envoyer des requêtes avec les méthodes GET ,POST , PUT etc..
   next();
 });
+
+// app.use('/api/books', bookRoutes);
+// app.use('/api/auth', userRoutes);
 
 module.exports = app;
