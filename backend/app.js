@@ -1,10 +1,13 @@
 const express = require("express");
-// const bookRoutes = require("./routes/books");
+const bookRoutes = require("./routes/bookM");
 const userRoutes = require("./routes/userM");
 
 const path = require("path"); //manipuler les chemins de fichiers
 const app = express();
 app.use(express.json());
+
+// Servir les fichiers statiques du dossier 'images'
+app.use("/images", express.static(path.join(__dirname, "images")));
 
 const mongoose = require("mongoose"); // faire un config et mettre mongo dedans
 mongoose
@@ -28,7 +31,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// app.use("/api/books", bookRoutes);
+app.use("/api/books", bookRoutes);
 app.use("/api/auth", userRoutes);
 
 module.exports = app;
