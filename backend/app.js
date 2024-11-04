@@ -1,4 +1,7 @@
+require("dotenv").config();
+console.log("MONGO_URI:", process.env.MONGO_URI);
 const express = require("express");
+const mongoose = require("mongoose");
 const bookRoutes = require("./routes/bookM");
 const userRoutes = require("./routes/userM");
 
@@ -6,18 +9,23 @@ const path = require("path"); //manipuler les chemins de fichiers
 const app = express();
 app.use(express.json());
 
-// Servir les fichiers statiques du dossier 'images'
+// afficher les images directement sur mon site
 app.use("/images", express.static(path.join(__dirname, "images")));
 
-const mongoose = require("mongoose"); // faire un config et mettre mongo dedans
+// Check if dotenv was loaded properly
+if (!process.env.MONGO_URI) {
+  console.log("Erreur lors du chargement des variables d'environnement.");
+  process.exit(1);
+}
 mongoose
-  .connect(
-    "mongodb+srv://loup:2UjwoLCqxxMnQIAF@cluster0.97ys2.mongodb.net/test?retryWrites=true&w=majority",
-    { useNewUrlParser: true, useUnifiedTopology: true }
-  )
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => console.log("Connexion à MongoDB réussie !"))
-  .catch(() => console.log("Connexion à MongoDB échouée !"));
+  .catch((error) => console.log("Connexion à MongoDB échouée !", error));
 
+// CORS (Cross-Origin Resource Sharing) permet a l'API de recevoir des requêtes provenant de domaines différents,
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*"); // accéder à l'API depuis n'importe quelle origine ( '*' )
   res.setHeader(
